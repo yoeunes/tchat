@@ -1,0 +1,23 @@
+{
+    "name": "yoeunes/tchat",
+    "description": "test technique hiit consulting",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Younes Khoubza",
+            "email": "younes.khoubza@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.0@dev"
+    }
+}
