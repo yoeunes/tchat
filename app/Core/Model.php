@@ -4,20 +4,17 @@ namespace App\Core;
 
 class Model
 {
-    protected $variables = null;
+    protected $variables = [];
     
-    protected $pk        = null;
+    protected $pk        = 'id';
     
     protected $table     = null;
     
     private   $bdd       = null;
     
-    public function __construct(DB $bdd, $table = null, $pk = null, $data = [])
+    public function __construct()
     {
-        $this->bdd       = $bdd;
-        $this->variables = $data;
-        $this->table     = $table;
-        $this->pk        = $pk;
+        $this->bdd       = DB::getInstance();
     }
     
     public function __get($name)
@@ -203,35 +200,5 @@ class Model
     public function run($sql, $bind = "")
     {
         return $this->bdd->run($sql, $bind);
-    }
-    
-    public function selectFromOtherTable($table, $where = "", $bind = "", $fields = "*")
-    {
-        return $this->bdd->select($table, $where, $bind, $fields);
-    }
-    
-    public function insertIntoOtherTable($table, $info)
-    {
-        return $this->bdd->insert($table, $info);
-    }
-    
-    public function deleteFromOtherTable($table, $where, $bind = "")
-    {
-        return $this->bdd->delete($table, $where, $bind);
-    }
-    
-    public function updateOtherTable($table, $info, $where, $bind = "")
-    {
-        return $this->bdd->update($table, $info, $where, $bind);
-    }
-    
-    public function selectFirstFromOtherTable($table, $where = "", $bind = "", $fields = "*")
-    {
-        $result = $this->bdd->select($table, $where, $bind, $fields);
-        if ($result == is_array($result)) {
-            return $result[0];
-        } else {
-            return $result;
-        }
     }
 }

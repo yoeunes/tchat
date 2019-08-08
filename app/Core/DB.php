@@ -16,6 +16,8 @@ class DB extends PDO
     
     private $errorMsgFormat;
     
+    protected static $_instance;
+    
     public function __construct($dsn, $user = "", $passwd = "")
     {
         $options = [
@@ -29,6 +31,19 @@ class DB extends PDO
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
         }
+    }
+    
+    public static function getInstance()
+    {
+        if (!self::$_instance) {
+            self::$_instance = new self('mysql:host=' . Config::get('database/host') . ';dbname=' . Config::get('database/database') . ';port=' . Config::get('database/port') . ';charset=' . Config::get('database/charset'), Config::get('database/username'), Config::get('database/password'));
+            
+            self::$_instance->setErrorCallbackFunction(function ($error) {
+                echo $error;
+            });
+        }
+        
+        return self::$_instance;
     }
     
     public function delete($table, $where, $bind = "")
@@ -176,11 +191,11 @@ class DB extends PDO
     public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat = "html")
     {
         //Variable functions for won't work with language constructs such as echo and print, so these are replaced with print_r.
-        if (in_array(strtolower($errorCallbackFunction), ["echo", "print"])) {
+        if (is_string($errorCallbackFunction) && in_array(strtolower($errorCallbackFunction), ["echo", "print"])) {
             $errorCallbackFunction = "print_r";
         }
         
-        if (function_exists($errorCallbackFunction)) {
+        if ((is_string($errorCallbackFunction) && function_exists($errorCallbackFunction)) || is_callable($errorCallbackFunction)) {
             $this->errorCallbackFunction = $errorCallbackFunction;
             if (!in_array(strtolower($errorMsgFormat), ["html", "text"])) {
                 $errorMsgFormat = "html";
