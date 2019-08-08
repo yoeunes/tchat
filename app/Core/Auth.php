@@ -20,11 +20,11 @@ class Auth
         }
     }
     
-    public function login($email = null, $password = null)
+    public function login($username, $password)
     {
         //sleep(2);
         
-        if (($email === null || $password === null) && Session::exists('user')) {
+        if (($username === null || $password === null) && Session::exists('user')) {
             $us = Session::get('user');
             $this->user->find($us['id']);
             $this->isLogged = true;
@@ -34,7 +34,7 @@ class Auth
         
         $user = $this->user->first(
             [
-                'email'    => $email,
+                'username'    => $username,
                 'password' => Hash::make($password),
             ]
         );
@@ -60,5 +60,18 @@ class Auth
     public function isLogged()
     {
         return $this->isLogged;
+    }
+    
+    public function getUser()
+    {
+        if(false === $this->isLogged()) {
+            return null;
+        }
+        
+        $us = Session::get('user');
+        
+        $this->user->find($us['id']);
+
+        return $this->user;
     }
 }

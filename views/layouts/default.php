@@ -1,53 +1,42 @@
 <!doctype html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="utf-8">
-
-    <title>MVC Todo</title>
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="starter-template.css" rel="stylesheet">
-
-    <style>
-        body {
-            padding-top: 5rem;
-        }
-
-        .starter-template {
-            padding: 3rem 1.5rem;
-            text-align: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>T’chat hiit consulting</title>
+    <link rel="icon" type="image/jpg" href="/assets/images/favicon.jpg" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/assets/css/app.css">
 </head>
-
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">MVC Todo</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
-            aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">T’chat Hiit Consulting</h5>
+    
+    <?php if(false === (new \App\Core\Auth())->isLogged()) : ?>
+        <a class="btn btn-outline-primary mr-1" href="/login">Se connecter</a>
+        <a class="btn btn-outline-primary" href="/register">S'inscrire</a>
+    <?php else : ?>
+        <span class="btn btn-outline-primary mr-1"><?php echo (new \App\Core\Auth())->getUser()->username; ?></span>
+        <a class="btn btn-outline-primary" href="/login/logout">Se déconnecter</a>
+    <?php endif; ?>
+</div>
 
-<main role="main" class="container">
+<?php echo $content; ?>
 
-    <div class="starter-template">
-        
-        <?php echo $content; ?>
-
-    </div>
-
-</main>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+<script src="/assets/vendor/jquery/jquery.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/vendor/momentjs/moment-with-locales.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/discussion.js"></script>
+<?php if((new \App\Core\Auth())->isLogged()) : ?>
+<script>
+    var discussion = new Discussion({
+        currentUser: <?php echo (new \App\Core\Auth())->getUser()->id ?>
+    });
+    discussion.bindEvents();
+</script>
+<?php endif; ?>
 </body>
 </html>

@@ -21,11 +21,20 @@ class Session
         }
     }
     
-    public static function get($name)
+    public static function flash($name, $string = '')
     {
         static::start();
         
-        return self::exists($name) ? $_SESSION[$name] : null;
+        if (self::exists($name)) {
+            $session = self::get($name);
+            self::delete($name);
+            
+            return $session;
+        }
+    
+        self::put($name, $string);
+    
+        return null;
     }
     
     public static function exists($name)
@@ -33,6 +42,13 @@ class Session
         static::start();
         
         return isset($_SESSION[$name]);
+    }
+    
+    public static function get($name)
+    {
+        static::start();
+        
+        return self::exists($name) ? $_SESSION[$name] : null;
     }
     
     public static function delete($name)

@@ -10,7 +10,7 @@ class Model
     
     protected $table     = null;
     
-    private   $bdd       = null;
+    protected $bdd       = null;
     
     public function __construct()
     {
