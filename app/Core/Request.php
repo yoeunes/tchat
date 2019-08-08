@@ -16,9 +16,7 @@ class Request
     public function __construct()
     {
         $this->url = $_SERVER['REDIRECT_URL'];
-        
-        $explodeUrl = array_slice(explode('/', trim($this->url)), 1);
-        
+        $explodeUrl = array_values(array_filter(explode('/', trim($this->url))));
         $this->controller = isset($explodeUrl[0]) ? $explodeUrl[0] : 'home';
         $this->action = isset($explodeUrl[1]) ? $explodeUrl[1] : 'index';
     }
